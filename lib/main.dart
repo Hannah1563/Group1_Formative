@@ -12,7 +12,6 @@ class AppColors {
   static const white = Colors.white;
   static const mutedWhite = Color(0xFFD8DCE6);
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
