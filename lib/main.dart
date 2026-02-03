@@ -35,106 +35,104 @@ class RiskStatusScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.navy, AppColors.navyDark],
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                child: Row(
-                  children: const [
-                    Icon(Icons.arrow_back_ios_new, color: AppColors.white),
-                    SizedBox(width: 12),
-                    Text(
-                      'Your Risk Status',
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+              child: Row(
+                children: const [
+                  Icon(Icons.arrow_back_ios_new, color: AppColors.white),
+                  SizedBox(width: 12),
+                  Text(
+                    'Your Risk Status',
+                    style: TextStyle(
+                      color: AppColors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      'Hello Alex At Risk',
                       style: TextStyle(
                         color: AppColors.white,
-                        fontSize: 22,
+                        fontSize: 26,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 28),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
-                child: Text(
-                  'Hello Alex At Risk',
-                  style: TextStyle(
-                    color: AppColors.white,
-                    fontSize: 26,
-                    fontWeight: FontWeight.w600,
                   ),
-                ),
-              ),
-              const SizedBox(height: 28),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    RiskStatCard(
-                      value: '75%',
-                      label: 'Attendance',
-                      color: AppColors.red,
+                  const SizedBox(height: 28),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        RiskStatCard(
+                          value: '75%',
+                          label: 'Attendance',
+                          color: AppColors.red,
+                        ),
+                        RiskStatCard(
+                          value: '60%',
+                          label: 'Assignment to\nSubmit',
+                          color: AppColors.yellow,
+                          valueColor: AppColors.navyDark,
+                        ),
+                        RiskStatCard(
+                          value: '63%',
+                          label: 'Average\nExcise',
+                          color: AppColors.red,
+                        ),
+                      ],
                     ),
-                    RiskStatCard(
-                      value: '60%',
-                      label: 'Assignment to\nSubmit',
-                      color: AppColors.yellow,
-                      valueColor: AppColors.navyDark,
-                    ),
-                    RiskStatCard(
-                      value: '63%',
-                      label: 'Average\nExcise',
-                      color: AppColors.red,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 32),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(18),
                   ),
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    decoration: BoxDecoration(
-                      color: AppColors.yellow,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Text(
-                      'Get Help',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.navyDark,
+                  const SizedBox(height: 32),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        decoration: BoxDecoration(
+                          color: AppColors.yellow,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Text(
+                          'Get Help',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.navyDark,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
-              const Spacer(),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 3,
         backgroundColor: AppColors.navyDark,
         selectedItemColor: AppColors.yellow,
         unselectedItemColor: AppColors.mutedWhite,
