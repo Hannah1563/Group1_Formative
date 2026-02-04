@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'screens/assignments_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.navy,
         fontFamily: 'Roboto',
       ),
-      home: const RiskStatusScreen(),
+      home: const AssignmentsScreen(), // Changed to AssignmentsScreen
     );
   }
 }
