@@ -4,12 +4,6 @@ void main() {
   runApp(const MyApp());
 }
 
-class _LayoutTuning {
-  static const double greetingTop = 150;
-  static const double cardsOffsetY = 0;
-  static const double buttonOffsetY = 0;
-}
-
 class AppColors {
   static const navy = Color(0xFF0B1B3E);
   static const navyDark = Color(0xFF07152F);
@@ -40,113 +34,107 @@ class RiskStatusScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stats = const [
-      _StatMetric(value: '75%', label: 'Attendance', color: AppColors.red),
-      _StatMetric(
-        value: '60%',
-        label: 'Assignment to\nSubmit',
-        color: AppColors.yellow,
-        valueColor: AppColors.navyDark,
-      ),
-      _StatMetric(value: '63%', label: 'Average\nExcise', color: AppColors.red),
-    ];
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.navy,
-        elevation: 0,
-        foregroundColor: AppColors.white,
-        leading: const BackButton(),
-        title: const Text(
-          'Your Risk Status',
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppColors.navy, AppColors.navyDark],
           ),
         ),
-      ),
-      body: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Stack(
-                  children: [
-                    Positioned(
-                      top: _LayoutTuning.greetingTop,
-                      left: 0,
-                      right: 0,
-                      child: const Text(
-                        'Hello Alex At Risk',
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 26,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Transform.translate(
-                            offset: Offset(0, _LayoutTuning.cardsOffsetY),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                for (var i = 0; i < stats.length; i++) ...[
-                                  Expanded(
-                                    child: RiskStatCard(metric: stats[i]),
-                                  ),
-                                  if (i != stats.length - 1)
-                                    const SizedBox(width: 12),
-                                ],
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 32),
-                          Transform.translate(
-                            offset: Offset(0, _LayoutTuning.buttonOffsetY),
-                            child: Container(
-                              padding: const EdgeInsets.all(18),
-                              decoration: BoxDecoration(
-                                color: AppColors.white,
-                                borderRadius: BorderRadius.circular(18),
-                              ),
-                              child: Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.symmetric(vertical: 18),
-                                decoration: BoxDecoration(
-                                  color: AppColors.yellow,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: const Text(
-                                  'Get Help',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.navyDark,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                child: Row(
+                  children: const [
+                    Icon(Icons.arrow_back_ios_new, color: AppColors.white),
+                    SizedBox(width: 12),
+                    Text(
+                      'Your Risk Status',
+                      style: TextStyle(
+                        color: AppColors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
                 ),
               ),
+              const SizedBox(height: 28),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                child: Text(
+                  'Hello Alex At Risk',
+                  style: TextStyle(
+                    color: AppColors.white,
+                    fontSize: 26,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 28),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    RiskStatCard(
+                      value: '75%',
+                      label: 'Attendance',
+                      color: AppColors.red,
+                    ),
+                    RiskStatCard(
+                      value: '60%',
+                      label: 'Assignment to\nSubmit',
+                      color: AppColors.yellow,
+                      valueColor: AppColors.navyDark,
+                    ),
+                    RiskStatCard(
+                      value: '63%',
+                      label: 'Average\nExcise',
+                      color: AppColors.red,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 32),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    decoration: BoxDecoration(
+                      color: AppColors.yellow,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Text(
+                      'Get Help',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.navyDark,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const Spacer(),
             ],
           ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 3,
         backgroundColor: AppColors.navyDark,
         selectedItemColor: AppColors.yellow,
         unselectedItemColor: AppColors.mutedWhite,
@@ -162,8 +150,9 @@ class RiskStatusScreen extends StatelessWidget {
   }
 }
 
-class _StatMetric {
-  const _StatMetric({
+class RiskStatCard extends StatelessWidget {
+  const RiskStatCard({
+    super.key,
     required this.value,
     required this.label,
     required this.color,
@@ -174,48 +163,36 @@ class _StatMetric {
   final String label;
   final Color color;
   final Color valueColor;
-}
-
-class RiskStatCard extends StatelessWidget {
-  const RiskStatCard({super.key, required this.metric});
-
-  final _StatMetric metric;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          width: 92,
-          height: 92,
-          child: Container(
-            decoration: BoxDecoration(
-              color: metric.color,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              metric.value,
-              style: TextStyle(
-                color: metric.valueColor,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+        Container(
+          width: 82,
+          height: 82,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            value,
+            style: TextStyle(
+              color: valueColor,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
-        const SizedBox(height: 12),
-        SizedBox(
-          height: 34,
-          child: Text(
-            metric.label,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            style: const TextStyle(
-              color: AppColors.mutedWhite,
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-            ),
+        const SizedBox(height: 10),
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: AppColors.mutedWhite,
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ],
