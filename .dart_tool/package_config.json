@@ -171,8 +171,8 @@
     }
   ],
   "generator": "pub",
-  "generatorVersion": "3.10.7",
+  "generatorVersion": "3.10.8",
   "flutterRoot": "file:///home/christian-tonny/Documents/Projects/flutter-sdk",
-  "flutterVersion": "3.38.7",
+  "flutterVersion": "3.38.9",
   "pubCache": "file:///home/christian-tonny/.pub-cache"
 }
