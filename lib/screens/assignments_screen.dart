@@ -78,11 +78,8 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-
           ElevatedButton(
-            onPressed: () {
-              
-            },
+            onPressed: () {},
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.accentYellow,
               foregroundColor: AppColors.black,
@@ -314,7 +311,13 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
   Widget _buildNavItem(IconData icon, String label, bool isActive) {
     return InkWell(
       onTap: () {
-        // Handle navigation
+        if (label == 'Dashboard') {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/risk-status',
+            (route) => false,
+          );
+        }
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,
