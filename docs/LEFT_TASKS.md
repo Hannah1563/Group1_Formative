@@ -66,20 +66,17 @@
 
 ---
 
-### Promesse — Assignments (DONE) + Demo Video
+### Promesse — Assignments (DONE)
 
 **Branch:** `promesse-assignments` (already merged)
 
 1. [x] Assignments screen — complete
-2. [ ] Record the demo video (tutorial-style, NOT just a screen recording):
-   - For each feature: show empty state, point to code, explain line by line with Flutter terms, then demo the result
-   - Cover: navigation, assignments CRUD, schedule, attendance, dashboard, UI choices, local storage
-   - **Must run on emulator or physical device** (browser-only = not graded)
 
 ---
 
 ### Everyone
 
+- [ ] **Demo video (5 pts)** — record together as a team. Each person presents their own section (tutorial-style, NOT just a screen recording). Show code, explain line by line with Flutter terms, then demo the result. Must run on emulator or physical device (browser-only = not graded).
 - [ ] **Git:** Each person must have meaningful commits on their own branch. Push regularly.
 - [ ] **PDF write-up** — each member writes a short paragraph on what they struggled with and how they solved it
 - [ ] **PDF includes:** GitHub repo link, demo video link, contribution tracker link
@@ -92,7 +89,7 @@
 | Criterion | Pts | Owner |
 |---|---|---|
 | Code Quality & Documentation | 7 | Gentil + Everyone |
-| Video Demo Walkthrough | 5 | Promesse |
+| Video Demo Walkthrough | 5 | Everyone (each presents their section) |
 | Core Features (assignments, schedule, attendance) | 5 | Promesse + Hugues |
 | Navigation & Screen Structure | 4 | Gentil |
 | UI/UX Design | 4 | Gentil + Everyone |
