@@ -1,41 +1,39 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
+import '../models/assignment.dart';
+import '../models/session.dart';
 
 class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
+  final List<Assignment> assignments;
+  final List<Session> sessions;
+
+  const DashboardScreen({
+    super.key,
+    required this.assignments,
+    required this.sessions,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.navy,
-      body: const SizedBox.shrink(),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        backgroundColor: AppColors.navyDark,
-        selectedItemColor: AppColors.yellow,
-        unselectedItemColor: AppColors.mutedWhite,
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) {
-          if (index == 1) {
-            Navigator.pushNamed(context, '/assignments');
-          } else if (index == 2) {
-            Navigator.pushNamed(context, '/schedule');
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: 'Dashboard',
+      appBar: AppBar(
+        backgroundColor: AppColors.navy,
+        elevation: 0,
+        title: const Text(
+          'Dashboard',
+          style: TextStyle(
+            color: AppColors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.assignment),
-            label: 'Assignments',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Schedule',
-          ),
-        ],
+        ),
+      ),
+      body: const Center(
+        child: Text(
+          'Dashboard — coming soon',
+          style: TextStyle(color: AppColors.mutedWhite, fontSize: 16),
+        ),
       ),
     );
   }

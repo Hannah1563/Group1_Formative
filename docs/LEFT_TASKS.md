@@ -9,15 +9,15 @@
 | What | Who | Status |
 |---|---|---|
 | Assignments screen (full CRUD, filters, priority, ALU colors) | Promesse | Done |
-| App colors, nav skeleton, main.dart | Christian | Done |
+| App colors, nav skeleton, main.dart | Gentil | Done |
 
-**Dashboard and Schedule screens are empty. Hugues and Gentil have no commits yet.**
+**Dashboard and Schedule screens are empty. Hugues has no commits yet.**
 
 ---
 
 ## Task Assignments
 
-### Christian — Nav Refactor + Local Storage
+### Gentil — Nav Refactor + Local Storage + Code Quality
 
 **Branch:** `christian-nav-storage`
 
@@ -27,8 +27,11 @@
 4. [ ] Hold assignment + session lists at top-level state so Dashboard can read them
 5. [ ] App opens on Dashboard tab by default
 6. [ ] Implement local storage with `shared_preferences` — save/load assignments + sessions on app start and on every change
-7. [ ] Add comments to your code
-8. [ ] Update `README.md` (purpose, folder structure, how to run)
+7. [ ] Ensure folder structure: `lib/models/`, `lib/screens/`, `lib/widgets/`, `lib/constants/`
+8. [ ] Extract reusable widgets (e.g. shared bottom nav) into `lib/widgets/`
+9. [ ] Consistent ALU branding, input validation, no pixel overflow
+10. [ ] Add comments to your code
+11. [ ] Update `README.md` (purpose, folder structure, how to run)
 
 ---
 
@@ -63,19 +66,6 @@
 
 ---
 
-### Gentil — Code Quality + UI Polish
-
-**Branch:** `gentil-quality`
-
-1. [ ] Ensure folder structure: `lib/models/`, `lib/screens/`, `lib/widgets/`, `lib/constants/`
-2. [ ] Extract reusable widgets (e.g. shared bottom nav, card styles) into `lib/widgets/`
-3. [ ] Consistent ALU branding across all screens (navy, yellow, red)
-4. [ ] Input validation on all forms (no empty titles, valid dates/times)
-5. [ ] Add comments across the codebase where missing
-6. [ ] No pixel overflow — test on emulator
-
----
-
 ### Promesse — Assignments (DONE) + Demo Video
 
 **Branch:** `promesse-assignments` (already merged)
@@ -104,9 +94,9 @@
 | Code Quality & Documentation | 7 | Gentil + Everyone |
 | Video Demo Walkthrough | 5 | Promesse |
 | Core Features (assignments, schedule, attendance) | 5 | Promesse + Hugues |
-| Navigation & Screen Structure | 4 | Christian |
+| Navigation & Screen Structure | 4 | Gentil |
 | UI/UX Design | 4 | Gentil + Everyone |
-| Local Storage | 5 | Christian |
+| Local Storage | 5 | Gentil |
 
 ---
 

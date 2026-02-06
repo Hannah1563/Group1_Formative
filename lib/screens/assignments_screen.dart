@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
+import '../models/assignment.dart';
 
-/// AssignmentsScreen - Manages student assignments with full CRUD functionality
-/// Features: Create, View, Edit, Delete, Mark Complete assignments
-/// Tabs: All, Formative, Summative to filter assignment types
 class AssignmentsScreen extends StatefulWidget {
-  const AssignmentsScreen({super.key});
+  final List<Assignment> assignments;
+  final Function(List<Assignment>) onAssignmentsChanged;
+
+  const AssignmentsScreen({
+    super.key,
+    required this.assignments,
+    required this.onAssignmentsChanged,
+  });
 
   @override
   State<AssignmentsScreen> createState() => _AssignmentsScreenState();
@@ -15,41 +20,25 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  // List to store all assignments - maintains state during session
-  final List<Assignment> _assignments = [
-    Assignment(
-      id: '1',
-      title: 'Mobile Dev Formative 1',
-      dueDate: DateTime(2026, 2, 18),
-      courseName: 'Mobile Development',
-      priority: Priority.high,
-      type: AssignmentType.formative,
-      isCompleted: false,
-    ),
-    Assignment(
-      id: '2',
-      title: 'Data Structures Quiz',
-      dueDate: DateTime(2026, 2, 10),
-      courseName: 'Data Structures',
-      priority: Priority.medium,
-      type: AssignmentType.formative,
-      isCompleted: false,
-    ),
-    Assignment(
-      id: '3',
-      title: 'Final Project Submission',
-      dueDate: DateTime(2026, 3, 1),
-      courseName: 'Mobile Development',
-      priority: Priority.high,
-      type: AssignmentType.summative,
-      isCompleted: false,
-    ),
-  ];
+  late List<Assignment> _assignments;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _assignments = List.from(widget.assignments);
+  }
+
+  @override
+  void didUpdateWidget(covariant AssignmentsScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.assignments != oldWidget.assignments) {
+      _assignments = List.from(widget.assignments);
+    }
+  }
+
+  void _notifyParent() {
+    widget.onAssignmentsChanged(List.from(_assignments));
   }
 
   @override
@@ -58,7 +47,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
     super.dispose();
   }
 
-  /// Filters assignments by type for tab display
   List<Assignment> _getFilteredAssignments(AssignmentType? type) {
     List<Assignment> filtered = type == null
         ? _assignments
@@ -68,7 +56,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
     return filtered;
   }
 
-  /// Shows dialog to create a new assignment
   void _showCreateAssignmentDialog() {
     final titleController = TextEditingController();
     final courseController = TextEditingController();
@@ -216,7 +203,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
                   );
                   return;
                 }
-                // Create new assignment
                 setState(() {
                   _assignments.add(
                     Assignment(
@@ -232,6 +218,7 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
                     ),
                   );
                 });
+                _notifyParent();
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -252,7 +239,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
     );
   }
 
-  /// Shows dialog to edit an existing assignment
   void _showEditAssignmentDialog(Assignment assignment) {
     final titleController = TextEditingController(text: assignment.title);
     final courseController = TextEditingController(text: assignment.courseName);
@@ -383,7 +369,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
                   );
                   return;
                 }
-                // Update assignment
                 setState(() {
                   final index = _assignments.indexWhere(
                     (a) => a.id == assignment.id,
@@ -402,6 +387,7 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
                     );
                   }
                 });
+                _notifyParent();
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -422,7 +408,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
     );
   }
 
-  /// Toggles assignment completion status
   void _toggleComplete(Assignment assignment) {
     setState(() {
       final index = _assignments.indexWhere((a) => a.id == assignment.id);
@@ -438,6 +423,7 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
         );
       }
     });
+    _notifyParent();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -453,7 +439,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
     );
   }
 
-  /// Deletes an assignment with confirmation
   void _deleteAssignment(Assignment assignment) {
     showDialog(
       context: context,
@@ -470,6 +455,7 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
               setState(() {
                 _assignments.removeWhere((a) => a.id == assignment.id);
               });
+              _notifyParent();
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -539,11 +525,9 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
         backgroundColor: AppColors.yellow,
         child: const Icon(Icons.add, color: AppColors.navyDark),
       ),
-      bottomNavigationBar: _buildBottomNavBar(),
     );
   }
 
-  /// Builds the list of assignments filtered by type
   Widget _buildAssignmentList(AssignmentType? type) {
     final assignments = _getFilteredAssignments(type);
 
@@ -583,7 +567,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
     );
   }
 
-  /// Builds individual assignment card with actions
   Widget _buildAssignmentCard(Assignment assignment) {
     final isOverdue =
         assignment.dueDate.isBefore(DateTime.now()) && !assignment.isCompleted;
@@ -713,7 +696,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
     );
   }
 
-  /// Builds priority indicator badge
   Widget _buildPriorityBadge(Priority priority) {
     Color badgeColor;
     switch (priority) {
@@ -746,7 +728,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
     );
   }
 
-  /// Builds assignment type badge
   Widget _buildTypeBadge(AssignmentType type) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -765,62 +746,4 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
     );
   }
 
-  /// Builds bottom navigation bar with consistent styling
-  Widget _buildBottomNavBar() {
-    return BottomNavigationBar(
-      currentIndex: 1, // Assignments tab is active
-      backgroundColor: AppColors.navyDark,
-      selectedItemColor: AppColors.yellow,
-      unselectedItemColor: AppColors.mutedWhite,
-      type: BottomNavigationBarType.fixed,
-      onTap: (index) {
-        if (index == 0) {
-          Navigator.pushNamed(context, '/dashboard');
-        } else if (index == 2) {
-          Navigator.pushNamed(context, '/schedule');
-        }
-      },
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.dashboard),
-          label: 'Dashboard',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.assignment),
-          label: 'Assignments',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_today),
-          label: 'Schedule',
-        ),
-      ],
-    );
-  }
-}
-
-/// Priority levels for assignments
-enum Priority { high, medium, low }
-
-/// Assignment types to categorize work
-enum AssignmentType { formative, summative }
-
-/// Assignment model class representing a single assignment
-class Assignment {
-  final String id;
-  final String title;
-  final DateTime dueDate;
-  final String courseName;
-  final Priority priority;
-  final AssignmentType type;
-  final bool isCompleted;
-
-  Assignment({
-    required this.id,
-    required this.title,
-    required this.dueDate,
-    required this.courseName,
-    required this.priority,
-    required this.type,
-    required this.isCompleted,
-  });
 }
