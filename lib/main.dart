@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'screens/announcements_screen.dart';
+import 'screens/assignments_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,6 +34,11 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Roboto',
       ),
       home: const StudentSignUpScreen(),
+      routes: {
+        '/risk-status': (context) => const RiskStatusScreen(),
+        '/assignments': (context) => const AssignmentsScreen(),
+        '/announcements': (context) => const AnnouncementsScreen(),
+      },
     );
   }
 }
@@ -324,16 +331,31 @@ class RiskStatusScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 3,
+        currentIndex: 0,
         backgroundColor: AppColors.navyDark,
         selectedItemColor: AppColors.yellow,
         unselectedItemColor: AppColors.mutedWhite,
         type: BottomNavigationBarType.fixed,
+        onTap: (index) {
+          if (index == 1) {
+            Navigator.pushNamed(context, '/assignments');
+          } else if (index == 2) {
+            // Schedule - to be implemented
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Schedule feature coming soon!'),
+                backgroundColor: AppColors.navy,
+              ),
+            );
+          } else if (index == 3) {
+            Navigator.pushNamed(context, '/announcements');
+          }
+        },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Dashboard'),
-          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: 'Quizlists'),
-          BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: 'E-Learning'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'You'),
+          BottomNavigationBarItem(icon: Icon(Icons.assignment), label: 'Assignments'),
+          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Schedule'),
+          BottomNavigationBarItem(icon: Icon(Icons.campaign), label: 'Announce'),
         ],
       ),
     );
