@@ -496,10 +496,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
       appBar: AppBar(
         backgroundColor: AppColors.navy,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
         title: const Text(
           'Assignments',
           style: TextStyle(
@@ -779,15 +775,10 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
       type: BottomNavigationBarType.fixed,
       onTap: (index) {
         if (index == 0) {
-          // Navigate to Dashboard
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            '/risk-status',
-            (route) => false,
-          );
+          Navigator.pushNamed(context, '/dashboard');
+        } else if (index == 2) {
+          Navigator.pushNamed(context, '/schedule');
         }
-        // index 1 is current screen (Assignments)
-        // index 2 would be Schedule (handled by other team member)
       },
       items: const [
         BottomNavigationBarItem(

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'constants/app_colors.dart';
 import 'screens/assignments_screen.dart';
-import 'screens/risk_status_screen.dart';
+import 'screens/dashboard_screen.dart';
+import 'screens/schedule_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,10 +20,11 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.navy,
         fontFamily: 'Roboto',
       ),
-      home: const RiskStatusScreen(),
+      home: const AssignmentsScreen(),
       routes: {
         '/assignments': (context) => const AssignmentsScreen(),
-        '/risk-status': (context) => const RiskStatusScreen(),
+        '/dashboard': (context) => const DashboardScreen(),
+        '/schedule': (context) => const ScheduleScreen(),
       },
     );
   }
