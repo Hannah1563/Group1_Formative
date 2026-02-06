@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// AnnouncementsScreen - Displays and manages academic announcements
-/// Features: View, Create, Edit, Delete announcements
-/// Categories: All, Academic, Administrative, Events
-/// 
 /// This screen helps ALU students stay informed about important
 /// university updates, deadlines, and events.
 class AnnouncementsScreen extends StatefulWidget {
