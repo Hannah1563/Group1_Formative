@@ -142,7 +142,7 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
 
                 // Priority dropdown
                 DropdownButtonFormField<Priority>(
-                  value: selectedPriority,
+                  initialValue: selectedPriority,
                   decoration: InputDecoration(
                     labelText: 'Priority Level',
                     border: OutlineInputBorder(
@@ -165,7 +165,7 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
 
                 // Assignment type dropdown
                 DropdownButtonFormField<AssignmentType>(
-                  value: selectedType,
+                  initialValue: selectedType,
                   decoration: InputDecoration(
                     labelText: 'Assignment Type',
                     border: OutlineInputBorder(
@@ -310,7 +310,7 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<Priority>(
-                  value: selectedPriority,
+                  initialValue: selectedPriority,
                   decoration: InputDecoration(
                     labelText: 'Priority Level',
                     border: OutlineInputBorder(
@@ -331,7 +331,7 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<AssignmentType>(
-                  value: selectedType,
+                  initialValue: selectedType,
                   decoration: InputDecoration(
                     labelText: 'Assignment Type',
                     border: OutlineInputBorder(
@@ -745,5 +745,4 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
       ),
     );
   }
-
 }
