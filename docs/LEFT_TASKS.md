@@ -8,7 +8,7 @@
 
 | What | Who | Status |
 |---|---|---|
-| Assignments screen (full CRUD, filters, priority, ALU colors) | Promesse | Done |
+| Assignments screen (full CRUD, priority, ALU colors) | Promesse | Done |
 | App colors, nav skeleton, main.dart | Gentil | Done |
 
 **Dashboard and Schedule screens are empty. Hugues has no commits yet.**

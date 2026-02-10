@@ -7,24 +7,48 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:group1_formative/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('App boots and bottom navigation switches tabs',
+      (WidgetTester tester) async {
+    SharedPreferences.setMockInitialValues({});
+
     await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Bottom nav labels exist.
+    final nav = find.byType(BottomNavigationBar);
+    expect(
+      find.descendant(of: nav, matching: find.text('Dashboard')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: nav, matching: find.text('Assignments')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: nav, matching: find.text('Schedule')),
+      findsOneWidget,
+    );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Starts on Dashboard.
+    final appBar = find.byType(AppBar);
+    expect(find.descendant(of: appBar, matching: find.text('Dashboard')),
+        findsOneWidget);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Switch to Assignments tab.
+    await tester.tap(find.text('Assignments'));
+    await tester.pumpAndSettle();
+    expect(find.descendant(of: appBar, matching: find.text('Assignments')),
+        findsOneWidget);
+
+    // Switch to Schedule tab.
+    await tester.tap(find.text('Schedule'));
+    await tester.pumpAndSettle();
+    expect(find.descendant(of: appBar, matching: find.text('Schedule')),
+        findsOneWidget);
   });
 }
