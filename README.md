@@ -5,7 +5,7 @@ A Flutter mobile application that helps ALU students manage assignments, track c
 ## Features
 
 - **Dashboard** — Overview of today's sessions, upcoming assignments, and attendance percentage
-- **Assignments** — Create, edit, delete, and mark assignments as complete. Filter by Formative/Summative
+- **Assignments** — Create, edit, delete, and mark assignments as complete
 - **Schedule** — Plan academic sessions (Class, Mastery Session, Study Group, PSL Meeting) and record attendance
 - **Local Storage** — Data persists between app restarts using `shared_preferences`
 
@@ -27,7 +27,6 @@ lib/
 │   └── storage_service.dart   # Local persistence with shared_preferences
 └── widgets/
     ├── bottom_nav_bar.dart    # Reusable 3-tab bottom navigation bar
-    └── status_metric_card.dart # Metric display card widget
 ```
 
 ## Architecture

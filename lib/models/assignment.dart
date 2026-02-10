@@ -2,8 +2,6 @@ import 'dart:convert';
 
 enum Priority { high, medium, low }
 
-enum AssignmentType { formative, summative }
-
 // Assignment model - used across the app for tracking student work
 class Assignment {
   final String id;
@@ -11,7 +9,6 @@ class Assignment {
   final DateTime dueDate;
   final String courseName;
   final Priority priority;
-  final AssignmentType type;
   final bool isCompleted;
 
   Assignment({
@@ -20,7 +17,6 @@ class Assignment {
     required this.dueDate,
     required this.courseName,
     required this.priority,
-    required this.type,
     required this.isCompleted,
   });
 
@@ -32,7 +28,6 @@ class Assignment {
       'dueDate': dueDate.toIso8601String(),
       'courseName': courseName,
       'priority': priority.index,
-      'type': type.index,
       'isCompleted': isCompleted,
     };
   }
@@ -45,7 +40,6 @@ class Assignment {
       dueDate: DateTime.parse(json['dueDate'] as String),
       courseName: json['courseName'] as String,
       priority: Priority.values[json['priority'] as int],
-      type: AssignmentType.values[json['type'] as int],
       isCompleted: json['isCompleted'] as bool,
     );
   }

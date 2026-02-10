@@ -35,7 +35,7 @@ class DashboardScreen extends StatelessWidget {
           session.date.month == today.month &&
           session.date.day == today.day;
     }).toList()
-      ..sort((a, b) => a.startTime.compareTo(b.startTime));
+      ..sort((a, b) => a.startMinutes.compareTo(b.startMinutes));
   }
 
   // get assignments due in next 7 days that aren't done yet
@@ -202,7 +202,7 @@ class DashboardScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.red.withOpacity(0.15),
+        color: AppColors.red.withAlpha(38),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppColors.red, width: 1.5),
       ),
@@ -231,7 +231,7 @@ class DashboardScreen extends StatelessWidget {
                   'Your attendance is ${percentage.toStringAsFixed(1)}%. '
                   'You need at least 75% to stay on track.',
                   style: TextStyle(
-                    color: AppColors.red.withOpacity(0.9),
+                    color: AppColors.red.withAlpha(230),
                     fontSize: 13,
                   ),
                 ),
@@ -327,7 +327,7 @@ class DashboardScreen extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
-            color: AppColors.yellow.withOpacity(0.2),
+            color: AppColors.yellow.withAlpha(51),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
@@ -394,7 +394,7 @@ class DashboardScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: AppColors.yellow.withOpacity(0.15),
+              color: AppColors.yellow.withAlpha(38),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Column(
@@ -465,14 +465,13 @@ class DashboardScreen extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: _getSessionTypeColor(session.sessionType)
-                            .withOpacity(0.2),
+                        color: AppColors.yellow.withAlpha(51),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         sessionTypeLabels[session.sessionType] ?? 'Session',
                         style: TextStyle(
-                          color: _getSessionTypeColor(session.sessionType),
+                          color: AppColors.yellow,
                           fontSize: 11,
                           fontWeight: FontWeight.w500,
                         ),
@@ -497,20 +496,6 @@ class DashboardScreen extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  // color for each session type
-  Color _getSessionTypeColor(SessionType type) {
-    switch (type) {
-      case SessionType.classSession:
-        return AppColors.yellow;
-      case SessionType.masterySession:
-        return AppColors.statusGreen;
-      case SessionType.studyGroup:
-        return const Color(0xFF64B5F6); // blue
-      case SessionType.pslMeeting:
-        return const Color(0xFFBA68C8); // purple
-    }
   }
 
   // list of upcoming assignments (or empty message)
@@ -603,8 +588,8 @@ class DashboardScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
               color: daysUntilDue <= 1
-                  ? AppColors.red.withOpacity(0.2)
-                  : AppColors.yellow.withOpacity(0.15),
+                  ? AppColors.red.withAlpha(51)
+                  : AppColors.yellow.withAlpha(38),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Column(
@@ -621,7 +606,7 @@ class DashboardScreen extends StatelessWidget {
                   DateFormat('MMM d').format(assignment.dueDate),
                   style: TextStyle(
                     color: daysUntilDue <= 1
-                        ? AppColors.red.withOpacity(0.8)
+                        ? AppColors.red.withAlpha(204)
                         : AppColors.mutedWhite,
                     fontSize: 10,
                   ),

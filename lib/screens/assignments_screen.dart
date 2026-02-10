@@ -16,16 +16,12 @@ class AssignmentsScreen extends StatefulWidget {
   State<AssignmentsScreen> createState() => _AssignmentsScreenState();
 }
 
-class _AssignmentsScreenState extends State<AssignmentsScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
+class _AssignmentsScreenState extends State<AssignmentsScreen> {
   late List<Assignment> _assignments;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
     _assignments = List.from(widget.assignments);
   }
 
@@ -41,19 +37,10 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
     widget.onAssignmentsChanged(List.from(_assignments));
   }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  List<Assignment> _getFilteredAssignments(AssignmentType? type) {
-    List<Assignment> filtered = type == null
-        ? _assignments
-        : _assignments.where((a) => a.type == type).toList();
-    // Sort by due date (earliest first)
-    filtered.sort((a, b) => a.dueDate.compareTo(b.dueDate));
-    return filtered;
+  List<Assignment> _getSortedAssignments() {
+    final sorted = List<Assignment>.from(_assignments);
+    sorted.sort((a, b) => a.dueDate.compareTo(b.dueDate));
+    return sorted;
   }
 
   void _showCreateAssignmentDialog() {
@@ -61,7 +48,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
     final courseController = TextEditingController();
     DateTime selectedDate = DateTime.now().add(const Duration(days: 7));
     Priority selectedPriority = Priority.medium;
-    AssignmentType selectedType = AssignmentType.formative;
 
     showDialog(
       context: context,
@@ -161,29 +147,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
                     }
                   },
                 ),
-                const SizedBox(height: 16),
-
-                // Assignment type dropdown
-                DropdownButtonFormField<AssignmentType>(
-                  initialValue: selectedType,
-                  decoration: InputDecoration(
-                    labelText: 'Assignment Type',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  items: AssignmentType.values.map((t) {
-                    return DropdownMenuItem(
-                      value: t,
-                      child: Text(t.name.toUpperCase()),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      setDialogState(() => selectedType = value);
-                    }
-                  },
-                ),
               ],
             ),
           ),
@@ -213,7 +176,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
                           ? 'General'
                           : courseController.text.trim(),
                       priority: selectedPriority,
-                      type: selectedType,
                       isCompleted: false,
                     ),
                   );
@@ -244,7 +206,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
     final courseController = TextEditingController(text: assignment.courseName);
     DateTime selectedDate = assignment.dueDate;
     Priority selectedPriority = assignment.priority;
-    AssignmentType selectedType = assignment.type;
 
     showDialog(
       context: context,
@@ -329,27 +290,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
                     }
                   },
                 ),
-                const SizedBox(height: 16),
-                DropdownButtonFormField<AssignmentType>(
-                  initialValue: selectedType,
-                  decoration: InputDecoration(
-                    labelText: 'Assignment Type',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  items: AssignmentType.values.map((t) {
-                    return DropdownMenuItem(
-                      value: t,
-                      child: Text(t.name.toUpperCase()),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      setDialogState(() => selectedType = value);
-                    }
-                  },
-                ),
               ],
             ),
           ),
@@ -382,7 +322,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
                           ? 'General'
                           : courseController.text.trim(),
                       priority: selectedPriority,
-                      type: selectedType,
                       isCompleted: assignment.isCompleted,
                     );
                   }
@@ -418,7 +357,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
           dueDate: assignment.dueDate,
           courseName: assignment.courseName,
           priority: assignment.priority,
-          type: assignment.type,
           isCompleted: !assignment.isCompleted,
         );
       }
@@ -490,35 +428,8 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
             fontWeight: FontWeight.w600,
           ),
         ),
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: AppColors.yellow,
-          indicatorWeight: 3,
-          labelColor: AppColors.white,
-          unselectedLabelColor: AppColors.mutedWhite,
-          labelStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-          unselectedLabelStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.normal,
-          ),
-          tabs: const [
-            Tab(text: 'All'),
-            Tab(text: 'Formative'),
-            Tab(text: 'Summative'),
-          ],
-        ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          _buildAssignmentList(null),
-          _buildAssignmentList(AssignmentType.formative),
-          _buildAssignmentList(AssignmentType.summative),
-        ],
-      ),
+      body: _buildAssignmentList(),
       // Floating action button to create new assignment
       floatingActionButton: FloatingActionButton(
         onPressed: _showCreateAssignmentDialog,
@@ -528,8 +439,8 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
     );
   }
 
-  Widget _buildAssignmentList(AssignmentType? type) {
-    final assignments = _getFilteredAssignments(type);
+  Widget _buildAssignmentList() {
+    final assignments = _getSortedAssignments();
 
     if (assignments.isEmpty) {
       return Center(
@@ -542,11 +453,9 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
               color: AppColors.mutedWhite,
             ),
             const SizedBox(height: 16),
-            Text(
-              type == null
-                  ? 'No assignments yet'
-                  : 'No ${type.name} assignments',
-              style: const TextStyle(color: AppColors.mutedWhite, fontSize: 16),
+            const Text(
+              'No assignments yet',
+              style: TextStyle(color: AppColors.mutedWhite, fontSize: 16),
             ),
             const SizedBox(height: 8),
             const Text(
@@ -568,9 +477,8 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
   }
 
   Widget _buildAssignmentCard(Assignment assignment) {
-    final isOverdue =
-        assignment.dueDate.isBefore(DateTime.now()) && !assignment.isCompleted;
-    final daysUntilDue = assignment.dueDate.difference(DateTime.now()).inDays;
+    final dueText =
+        '${assignment.dueDate.day}/${assignment.dueDate.month}/${assignment.dueDate.year}';
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -623,23 +531,14 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
                     Icon(
                       Icons.calendar_today,
                       size: 14,
-                      color: isOverdue ? AppColors.red : Colors.grey[600],
+                      color: Colors.grey[600],
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      isOverdue
-                          ? 'Overdue!'
-                          : daysUntilDue == 0
-                          ? 'Due today'
-                          : daysUntilDue == 1
-                          ? 'Due tomorrow'
-                          : 'Due in $daysUntilDue days',
+                      'Due: $dueText',
                       style: TextStyle(
                         fontSize: 13,
-                        color: isOverdue ? AppColors.red : Colors.grey[600],
-                        fontWeight: isOverdue
-                            ? FontWeight.w600
-                            : FontWeight.normal,
+                        color: Colors.grey[600],
                       ),
                     ),
                   ],
@@ -679,15 +578,13 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
               ],
             ),
           ),
-          // Priority and type badges
+          // Priority badge
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
             child: Row(
               children: [
                 const SizedBox(width: 48), // Align with title
                 _buildPriorityBadge(assignment.priority),
-                const SizedBox(width: 8),
-                _buildTypeBadge(assignment.type),
               ],
             ),
           ),
@@ -713,7 +610,7 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: badgeColor.withOpacity(0.2),
+        color: badgeColor.withAlpha(51),
         borderRadius: BorderRadius.circular(4),
         border: Border.all(color: badgeColor),
       ),
@@ -723,24 +620,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen>
           fontSize: 10,
           fontWeight: FontWeight.w600,
           color: badgeColor,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTypeBadge(AssignmentType type) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: AppColors.navy.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        type.name.toUpperCase(),
-        style: const TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w600,
-          color: AppColors.navy,
         ),
       ),
     );
