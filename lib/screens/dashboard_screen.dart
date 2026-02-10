@@ -3,12 +3,8 @@ import 'package:intl/intl.dart';
 import '../constants/app_colors.dart';
 import '../models/assignment.dart';
 import '../models/session.dart';
-
-// Dashboard Screen - shows the main overview for students
-// Shows today's date, sessions, upcoming assignments, and attendance
-// By Hannah (hannah-dashboard branch)
 class DashboardScreen extends StatelessWidget {
-  // these come from main.dart
+  // Data from main.dart
   final List<Assignment> assignments;
   final List<Session> sessions;
 
@@ -18,7 +14,7 @@ class DashboardScreen extends StatelessWidget {
     required this.sessions,
   });
 
-  // figure out what week we're in (semester started Jan 20)
+  // Figure out the current week (semester started Jan 20)
   int _getAcademicWeek() {
     final semesterStart = DateTime(2026, 1, 20);
     final today = DateTime.now();
@@ -27,7 +23,7 @@ class DashboardScreen extends StatelessWidget {
     return weekNumber.clamp(1, 16); // keep between 1-16
   }
 
-  // get only the sessions happening today
+  // Get today's sessions
   List<Session> _getTodaySessions() {
     final today = DateTime.now();
     return sessions.where((session) {
@@ -38,7 +34,7 @@ class DashboardScreen extends StatelessWidget {
       ..sort((a, b) => a.startTime.compareTo(b.startTime));
   }
 
-  // get assignments due in next 7 days that aren't done yet
+  // Get assignments due in the next 7 days
   List<Assignment> _getUpcomingAssignments() {
     final today = DateTime.now();
     final sevenDaysLater = today.add(const Duration(days: 7));
@@ -51,7 +47,7 @@ class DashboardScreen extends StatelessWidget {
       ..sort((a, b) => a.dueDate.compareTo(b.dueDate));
   }
 
-  // calculate attendance % based on sessions marked present/absent
+  // Calculate attendance percentage
   double _calculateAttendancePercentage() {
     final recordedSessions = sessions.where(
       (session) => session.attendanceStatus != null
@@ -68,14 +64,14 @@ class DashboardScreen extends StatelessWidget {
     return (presentCount / recordedSessions.length) * 100;
   }
 
-  // count incomplete assignments
+  // Count how many assignments are not done
   int _getPendingAssignmentCount() {
     return assignments.where((a) => !a.isCompleted).length;
   }
 
   @override
   Widget build(BuildContext context) {
-    // grab all the data we need
+    // Get all the info we need for the dashboard
     final todaySessions = _getTodaySessions();
     final upcomingAssignments = _getUpcomingAssignments();
     final attendancePercentage = _calculateAttendancePercentage();
@@ -106,30 +102,30 @@ class DashboardScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // date and week at top
+              // Date and week at the top
               _buildDateSection(todayFormatted, academicWeek),
               
               const SizedBox(height: 20),
               
-              // show warning if attendance below 75%
+              // Show warning if attendance is low
               if (attendancePercentage < 75)
                 _buildAttendanceWarningBanner(attendancePercentage),
               
               if (attendancePercentage < 75) const SizedBox(height: 16),
               
-              // attendance and pending count cards
+              // Attendance and pending assignments cards
               _buildStatsSummaryRow(attendancePercentage, pendingCount),
               
               const SizedBox(height: 24),
               
-              // today's sessions
+              // Today's sessions
               _buildSectionHeader('Today\'s Sessions', todaySessions.length),
               const SizedBox(height: 12),
               _buildTodaySessionsList(todaySessions),
               
               const SizedBox(height: 24),
               
-              // assignments due soon
+              // Assignments due soon
               _buildSectionHeader('Due This Week', upcomingAssignments.length),
               const SizedBox(height: 12),
               _buildUpcomingAssignmentsList(upcomingAssignments),
@@ -142,7 +138,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  // date section with week badge
+  // Date section with week badge
   Widget _buildDateSection(String dateString, int weekNumber) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -197,7 +193,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  // red warning banner for low attendance
+  // Red warning banner for low attendance
   Widget _buildAttendanceWarningBanner(double percentage) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -243,7 +239,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  // row with attendance and pending count cards
+  // Row with attendance and pending assignments
   Widget _buildStatsSummaryRow(double attendance, int pendingCount) {
     return Row(
       children: [
@@ -268,7 +264,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  // reusable stat card
+  // Stat card widget
   Widget _buildStatCard({
     required IconData icon,
     required String label,
@@ -311,7 +307,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  // section title with count badge
+  // Section title with count badge
   Widget _buildSectionHeader(String title, int count) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -343,7 +339,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  // list of today's sessions (or empty message)
+  // List of today's sessions (or empty message)
   Widget _buildTodaySessionsList(List<Session> todaySessions) {
     if (todaySessions.isEmpty) {
       return Container(
@@ -379,7 +375,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  // single session card
+  // Single session card
   Widget _buildSessionCard(Session session) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
@@ -499,7 +495,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  // color for each session type
+  // Color for each session type
   Color _getSessionTypeColor(SessionType type) {
     switch (type) {
       case SessionType.classSession:
@@ -513,7 +509,7 @@ class DashboardScreen extends StatelessWidget {
     }
   }
 
-  // list of upcoming assignments (or empty message)
+  // List of upcoming assignments (or empty message)
   Widget _buildUpcomingAssignmentsList(List<Assignment> upcomingAssignments) {
     if (upcomingAssignments.isEmpty) {
       return Container(
@@ -551,7 +547,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  // single assignment card
+  // Single assignment card
   Widget _buildAssignmentCard(Assignment assignment) {
     final daysUntilDue = assignment.dueDate.difference(DateTime.now()).inDays;
     
@@ -634,7 +630,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  // convert days to text like "Today" or "In 3 days"
+  // Convert days to text like "Today" or "In 3 days"
   String _getDueDateText(int daysUntilDue) {
     if (daysUntilDue < 0) return 'Overdue';
     if (daysUntilDue == 0) return 'Today';
@@ -642,7 +638,7 @@ class DashboardScreen extends StatelessWidget {
     return 'In $daysUntilDue days';
   }
 
-  // priority colors: high=red, medium=yellow, low=green
+  // Priority colors: high=red, medium=yellow, low=green
   Color _getPriorityColor(Priority priority) {
     switch (priority) {
       case Priority.high:
