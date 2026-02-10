@@ -2,42 +2,6 @@ import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../models/session.dart';
 
-// class ScheduleScreen extends StatelessWidget {
-//   final List<Session> sessions;
-//   final Function(List<Session>) onSessionsChanged;
-
-//   const ScheduleScreen({
-//     super.key,
-//     required this.sessions,
-//     required this.onSessionsChanged,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: AppColors.navy,
-//       appBar: AppBar(
-//         backgroundColor: AppColors.navy,
-//         elevation: 0,
-//         title: const Text(
-//           'Schedule',
-//           style: TextStyle(
-//             color: AppColors.white,
-//             fontSize: 20,
-//             fontWeight: FontWeight.w600,
-//           ),
-//         ),
-//       ),
-//       body: const Center(
-//         child: Text(
-//           'Schedule — coming soon',
-//           style: TextStyle(color: AppColors.mutedWhite, fontSize: 16),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 class ScheduleScreen extends StatelessWidget {
   final List<Session> sessions;
   final Function(List<Session>) onSessionsChanged;
@@ -66,115 +30,135 @@ class ScheduleScreen extends StatelessWidget {
 
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text(existingSession == null ? 'Add Session' : 'Edit Session'),
-        content: SingleChildScrollView(
-          child: Column(
-            children: [
-              /// Title input
-              TextField(
-                controller: titleController,
-                decoration: const InputDecoration(labelText: 'Session Title'),
-              ),
+      builder: (_) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: Text(existingSession == null ? 'Add Session' : 'Edit Session'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                /// Title input
+                TextField(
+                  controller: titleController,
+                  decoration: const InputDecoration(labelText: 'Session Title *'),
+                ),
 
-              /// Location input
-              TextField(
-                controller: locationController,
-                decoration: const InputDecoration(labelText: 'Location'),
-              ),
+                /// Location input
+                TextField(
+                  controller: locationController,
+                  decoration: const InputDecoration(labelText: 'Location'),
+                ),
 
-              const SizedBox(height: 10),
+                const SizedBox(height: 10),
 
-              /// Date picker
-              ElevatedButton(
-                onPressed: () async {
-                  final picked = await showDatePicker(
-                    context: context,
-                    initialDate: selectedDate,
-                    firstDate: DateTime(2024),
-                    lastDate: DateTime(2030),
-                  );
-                  if (picked != null) selectedDate = picked;
-                },
-                child: const Text('Pick Date'),
-              ),
+                /// Date picker
+                ElevatedButton(
+                  onPressed: () async {
+                    final picked = await showDatePicker(
+                      context: context,
+                      initialDate: selectedDate,
+                      firstDate: DateTime(2024),
+                      lastDate: DateTime(2030),
+                    );
+                    if (picked != null) {
+                      setDialogState(() => selectedDate = picked);
+                    }
+                  },
+                  child: Text('Date: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}'),
+                ),
 
-              /// Start time picker
-              ElevatedButton(
-                onPressed: () async {
-                  final picked = await showTimePicker(
-                    context: context,
-                    initialTime: startTime,
-                  );
-                  if (picked != null) startTime = picked;
-                },
-                child: const Text('Pick Start Time'),
-              ),
+                /// Start time picker
+                ElevatedButton(
+                  onPressed: () async {
+                    final picked = await showTimePicker(
+                      context: context,
+                      initialTime: startTime,
+                    );
+                    if (picked != null) {
+                      setDialogState(() => startTime = picked);
+                    }
+                  },
+                  child: Text('Start: ${startTime.format(context)}'),
+                ),
 
-              /// End time picker
-              ElevatedButton(
-                onPressed: () async {
-                  final picked = await showTimePicker(
-                    context: context,
-                    initialTime: endTime,
-                  );
-                  if (picked != null) endTime = picked;
-                },
-                child: const Text('Pick End Time'),
-              ),
+                /// End time picker
+                ElevatedButton(
+                  onPressed: () async {
+                    final picked = await showTimePicker(
+                      context: context,
+                      initialTime: endTime,
+                    );
+                    if (picked != null) {
+                      setDialogState(() => endTime = picked);
+                    }
+                  },
+                  child: Text('End: ${endTime.format(context)}'),
+                ),
 
-              /// Session type dropdown
-              DropdownButton<SessionType>(
-                value: selectedType,
-                isExpanded: true,
-                items: SessionType.values.map((type) {
-                  return DropdownMenuItem(
-                    value: type,
-                    child: Text(sessionTypeLabels[type]!),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  if (value != null) selectedType = value;
-                },
-              ),
-            ],
+                /// Session type dropdown
+                DropdownButton<SessionType>(
+                  value: selectedType,
+                  isExpanded: true,
+                  items: SessionType.values.map((type) {
+                    return DropdownMenuItem(
+                      value: type,
+                      child: Text(sessionTypeLabels[type]!),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setDialogState(() => selectedType = value);
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (titleController.text.trim().isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please enter a session title'),
+                      backgroundColor: AppColors.red,
+                    ),
+                  );
+                  return;
+                }
+
+                final newSession = Session(
+                  id:
+                      existingSession?.id ??
+                      DateTime.now().millisecondsSinceEpoch.toString(),
+                  title: titleController.text.trim(),
+                  date: selectedDate,
+                  startTime: startTime.format(context),
+                  endTime: endTime.format(context),
+                  location: locationController.text.trim(),
+                  sessionType: selectedType,
+                  attendanceStatus: existingSession?.attendanceStatus,
+                );
+
+                final updatedSessions = [...sessions];
+
+                if (existingSession != null) {
+                  final index = sessions.indexOf(existingSession);
+                  updatedSessions[index] = newSession;
+                } else {
+                  updatedSessions.add(newSession);
+                }
+
+                onSessionsChanged(updatedSessions);
+                Navigator.pop(context);
+              },
+              child: const Text('Save'),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final newSession = Session(
-                id:
-                    existingSession?.id ??
-                    DateTime.now().millisecondsSinceEpoch.toString(),
-                title: titleController.text,
-                date: selectedDate,
-                startTime: startTime.format(context),
-                endTime: endTime.format(context),
-                location: locationController.text,
-                sessionType: selectedType,
-                attendanceStatus: existingSession?.attendanceStatus,
-              );
-
-              final updatedSessions = [...sessions];
-
-              if (existingSession != null) {
-                final index = sessions.indexOf(existingSession);
-                updatedSessions[index] = newSession;
-              } else {
-                updatedSessions.add(newSession);
-              }
-
-              onSessionsChanged(updatedSessions);
-              Navigator.pop(context);
-            },
-            child: const Text('Save'),
-          ),
-        ],
       ),
     );
   }
@@ -237,8 +221,30 @@ class ScheduleScreen extends StatelessWidget {
 
                     /// Delete on long press
                     onLongPress: () {
-                      final updatedSessions = [...sessions]..removeAt(index);
-                      onSessionsChanged(updatedSessions);
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: const Text('Delete Session'),
+                          content: Text('Delete "${session.title}"?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('Cancel'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                final updatedSessions = [...sessions]..removeAt(index);
+                                onSessionsChanged(updatedSessions);
+                                Navigator.pop(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.red,
+                              ),
+                              child: const Text('Delete'),
+                            ),
+                          ],
+                        ),
+                      );
                     },
                   ),
                 );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Christian's original colors
+  // colors
   static const Color navy = Color(0xFF0B1B3E);
   static const Color navyDark = Color(0xFF07152F);
   static const Color yellow = Color(0xFFF2C94C);
@@ -10,7 +10,7 @@ class AppColors {
   static const Color mutedWhite = Color(0xFFD8DCE6);
   static const Color black = Colors.black;
 
-  // Aliases for compatibility
+  // Aliases 
   static const Color primaryNavy = navy;
   static const Color accentYellow = yellow;
   static const Color warningRed = red;
